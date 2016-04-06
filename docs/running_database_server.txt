@@ -1,0 +1,28 @@
+URLyBird HOTEL ROOM BOOKING APPLICATION
+
+HOW TO RUN THE DATABASE SERVER
+
+1) On running the server at the command line, specify the command line argument as server (case ignored). The environmental variables should be set to point to JAVA_HOME.
+Hence the command is:
+java <hyphen sign>jar <path_and_filename> [<mode>]
+    Where
+       path_and_filename = runme.jar
+       mode              = server
+	hyphen sign      = the English language hyphen sign.
+
+Hence command = java <hyphen_sign>jar runme.jar server
+
+   
+
+2) Press the return/enter key to run.
+
+3) From the resulting window which appears, select the location of the  database file, using the Select button.
+
+ If this is NOT the first time the server is being run, then the last saved location of the database file location  should appear in the database location textfield.
+
+4) When the database file location is set, click on the Start button to start the RMI server
+
+5) The Exit Connection button is disabled if the server has not started but gets enabled when the server starts to run. At that same time the Start button gets disabled and the message Server Running... is shown in the title bar of the window. 
+
+6) The server may be shut down by clicking on the Exit Connection button or the close button at the top right corner of the Server Database Starter window.
+

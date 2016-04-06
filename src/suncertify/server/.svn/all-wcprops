@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/Suncertify/!svn/ver/9/trunk/HotelRoom/src/suncertify/server
+END
+RemoteDatabase.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/Suncertify/!svn/ver/3/trunk/HotelRoom/src/suncertify/server/RemoteDatabase.java
+END
+RemoteDatabaseImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/Suncertify/!svn/ver/24/trunk/HotelRoom/src/suncertify/server/RemoteDatabaseImpl.java
+END
+RemoteConnector.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Suncertify/!svn/ver/24/trunk/HotelRoom/src/suncertify/server/RemoteConnector.java
+END
+RemoteDatabaseFactory.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/Suncertify/!svn/ver/10/trunk/HotelRoom/src/suncertify/server/RemoteDatabaseFactory.java
+END
+RegisterDatabase.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/Suncertify/!svn/ver/24/trunk/HotelRoom/src/suncertify/server/RegisterDatabase.java
+END
+RemoteDatabaseFactoryImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/Suncertify/!svn/ver/24/trunk/HotelRoom/src/suncertify/server/RemoteDatabaseFactoryImpl.java
+END

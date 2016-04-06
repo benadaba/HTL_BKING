@@ -1,0 +1,626 @@
+CHOICES.TXT
+
+- The serialVersionUID ;
+
+I declared this value manually. This will ensure consistency in the value during serialization and deserialization even 
+after slight changes in the HotelRoom class. Because if i had allowed the compiler to generate it automatically the 
+serialVersionUID value would change any time there is a slight modification in the HotelRoom class. This will make my 
+modified classes incompatible with the original class during deserialization resulting in an
+invalidClassException exception being thrown.
+
+
+ >>> HotelRoom class.
+
+All fields are declared as String including the size, rate and date 
+
+Reason/advantage. 
+Gives uniformity, and ease of management particularly when the record fields in the database file are stored as 
+String array.
+
+
+
+There are no setter methods for name,location, smoking, rate, size, date ariables because there are no places in the 
+application where the client is going to set these variables. These variables and their values are already created and
+established in the database file, hence we are only to read and get these values. So only getters methods are provided 
+for these variables in the HotelRoom class.
+
+The only variable whose value our client has the opportunity to set is the owner (ownerID) that is during the booking process.
+Hence the appropriate setter method is provided for it.
+
+Hence during the construction of a hotel room object, all the appropriate values are obtained from the database file and the 
+client is only allowed to set the owner (ownerID) value when they are booking for the record.
+
+The advantage  is that, it makes the code simple 
+2) it reserves a lot of memory and space.
+
+There are constants which are used as indexes when the HotelRoom object is converted to an array and its field values
+are being accessed.
+
+
+The class has two  methods getTitle, which gets the fields(variables') title as string seperated by commas and getFields method
+which gets the field(variables') values of this hotel room object separated by comma.
+These methods are called in various parts of the application specifically the getTitle method is called in the 
+ApplicationWindow class whenever a new HotelRoomTableModel is been instantiated.
+
+advantages of these static fields and these methods are.
+1) they make the code cleaner as one would not have to be coding all these fields one after the other in all parts of the 
+   application.
+2) they make it simpler to maintain the code because if there is any change necessary we just change the source,
+, that is, these methods and fields without having to break our other parts of the code.
+
+
+disadvantage.
+1) increases coupling, hence if the HotelRoom class becomes non-existent again , the other parts  of our code which call
+these methods  and constants would break.
+
+
+This class overrides class Object's equals and hashCode methods which are used to make comparisons during the booking process.
+That is to determine if a room selected to be booked is equal to a room in the database file by comparing all the field values
+with the exception of the owner field because that has no value assigned to it. 
+
+
+
+Design decision in Data class implementation.
+1)  Implemented Data class to an interface. (Programmed to an interface).
+   
+   advants of coding to an interface.
+1. Helps to overcome some  limitations of the methods given by Sun(what are these limitations, state them)
+2) 
+
+Extended sun interface and coded to an interface.
+advants: 
+1. flexible and easily maintinable in the future.
+2. Not harded coded and in future any subclass that implements the ExtendedInterface can be 
+   implemented straight away without having to change a lot of code.
+
+ __ the getHotelRoomList() method implemented in the Data class returns all records including those marked deleted.
+   the reason is that the deleted records still have a place in the database and hence have record Numbers
+   associated with them. 
+advants. 1) returning them makes it easier to trace every record by record Number with much ease.
+          than it would have been if deleted records had to monitored so that their recNo numbers are 
+          ignored anytime there is a such in the database whiles those records actually occupy space,
+
+         2)
+         3)
+
+Search and updated directly to the database file 
+
+advants.
+1) Saves time that has to be spent to update the database after all dealings when using a cache.
+2) Any point in time what however the database file is presented is the up-to-date state of it.
+   this is because it is instantly update there and then when an operation occurs on it.
+3) It is an easy approach for junior programmers who would not know much about the technicalities of caching.
+4)
+5)
+
+disadvants.
+1) tedious
+
+alternate approach
+ a) caching. --- 
+    advants -.
+
+1)clean
+2)saves time of going to and from data file
+3)
+
+disadvants
+1) At any poin in time what is present in the database might not be the 
+
+
+***) Used a HashMap to store the list of records returned from the database.
+ --     Map stores the hotel room records as values and the corresponding record numbers in the database file
+        as keys.
+    reasons/advants for using map
+     1) Quick random access
+     2) indexed
+    3) *************
+disadvants
+
+alternative approaches
+    i) vectors
+     2) set
+advants
+
+disadvants
+
+A) used a HashMap to store the list of locked records.
+   records as values
+   recNos as keys
+advants;
+
+disadvantages
+
+alternative approach
+    i) vectors
+    2) set
+advants
+
+disadvants
+
+
+B) in DB.
+Data  - 
+  - used RandomAccessFile because makes it convenient and easy to access the database file from different offsets randomly.
+  - made local cos tis not serializable but it will be carried over a network since that LocalClient object has a reference
+to it ; alternate approach
+advants  -1) this makes it easy to read and write to the database file.
+          2) 
+
+- Used ReentrantLocks with its  -   ReentrantReadWriteLock and Condition classes
+
+advantages.
+1) It offers features like lock polling, timed lock waits, and interruptible lock waits. 
+2) Additionally, it offers far better performance under heavy contention. 
+  (In other words, when many threads are attempting to access a shared resource, the JVM will spend 
+ less time scheduling threads and more time executing them.) 
+This means that when many threads are all contending for the same lock,
+ the total throughput is generally going to be better with ReentrantLock than with synchronized
+3) it can do everything synchronized does, has the same memory and concurrency semantics
+4) Lock objects have the ability to back out of an attempt to acquire a lock unlike implicit locks. (though this feature is 
+ not used in my implementation).
+
+
+
+other alternative. normal synchronization with monitor methods and statements.
+advants.
+1) Synchronization requires that locks be released in the same stack frame in which they were acquired, 
+  which most of the time is the right thing 
+2) and interacts nicely with exception handling
+3) For one, it is impossible to forget to release a lock when using synchronization; 
+	the JVM does that for you when you exit the synchronized block.
+
+
+disadvantages
+synchronization is good, but not perfect.
+1)it is not possible to interrupt a thread that is waiting to acquire a lock,
+2) it is not possible to poll for a lock or attempt to acquire a lock without being willing to wait forever for it.
+
+
+    -
+
+2) created local instances of RandomAccessFile in each of the methods that contain reading or writing to the database file.
+   this is because RandomAccessFile is not serializable and hence cannot be transported over the network when running in the
+   networked mode. 
+   It is thus created locally and disposed off after method finishes running particularly when running the server mode.
+
+>>> Methods 
+   Delete
+A record is unlocked before it is deleted. Thus the unlock method is called first from within the delete
+ method before a delete takes place. Because if the client does not have the legitimate right to the right cookie, they
+cannot unlock that record, which will through a SecurityException, let alone deleting it.
+   
+Seeks the start of the record to be deleted and writes deleted at the start of the position.
+It can be enhanced in the future though.
+
+   advantages.
+  1) All the other records maintain their same locational numbers in the database, hence reference to them by such numbers
+    is maintained and made easier.
+   
+2) It is an easier and straight forward approach.
+
+  other means by which it could have been done.
+  >>>could have deleted the entire record with all its fields and the next record aligned to occupy the locational space 
+     and number of the deleted record, in the database.
+
+    advants. 
+    1) creates more space.
+
+    disadvantages.
+     2) rewriting of records to align with locational positions and tedious and may be bugs prone.
+
+ readRecord method.
+- an inner class is created to assist in converting from the one large byte[] into multiple
+ String[] - one String per field.  It was an inner class because that class is used for that sole purpose and used only in 
+that method.
+
+
+update method
+In the update, A record is unlocked before it is updated. Thus the unlock method is called first from within the update
+ method before an update takes place. Because if the client does not have the legitimate right to the right cookie, they
+cannot unlock that record, which will through a SecurityException, let alone updating it.
+
+
+
+findByCriteria method.
+- used ArrayList to hold internally, the record numbers of the found record numbers from the search.
+Reasons./advants of ArrayList.
+1).
+
+create method
+If -1 is returned from the create method, it means that there was no new data inserted to be created
+ so there was no need to go ahead to create and empty record. When the end of file is reached without 
+finding a deleted entry, the new record is written to the end of the database file.
+
+lockRecord method
+- used System.currentTimeMillis() multiplied by new Random().nextLong()
+This provides a more unique cookie.
+advantages
+1) It is native 
+2) Its resolution (or granularity) depends on the underlying OS 
+3) It generally has a very fast response time 
+4) The method signature is not synchronized but the implementation usually is 
+
+disadvantages.
+
+other options.
+System.nanoTime();
+and the current Threads ID.
+
+
+
+Unlock method.
+//If record number is not in the HashMap (that is, it is not locked) or the record number is not
+        // associated with the correct cookie then throw a SecurityException.
+
+
+ 
+  - Used RandomAccessFile to read and write to the database file.
+advantages.
+1)The real advantage of random access files is as their name implies, once they are opened, they can be read from or
+ written to in a random manner just by using a record number 
+2)You can even add to the end of the file since you will know how many records are in the file. 
+3) RandomAccessFile takes advantage of particular behaviours that are not found in normal I/O devices
+  With RandomAccessFile, you can seek to any desired location in the file then read and/or write the desired amount of data.
+
+disadvantages.
+1) You have to manually, arithmatically calculate the position in the file you want to read or write to and seek it with the
+  seek method of the RandomAccessFile.
+  
+
+
+other alternative. 
+other I/O devices like BufferedInputStream, BufferedOutputStream, FileInputStream and FileOutStream.
+Main disadvantage is they will not offer you random access to any position of choice in the database file.
+
+
+- Used HashMap to store the generated cookies from the lockRecord method.
+   recordNumbers are keys whiles cookies are associated values in the map.
+
+advantages of using hashMap.
+1)  A hashmap is not synchronized and faster than hashtable.????
+2)One other minor advantage of HashMap over Hashtable is that it allows null
+both as a key and a value. Hashtable does not.
+3)Repopulating a HashMap offsets the performance gained by avoiding synchronized accessor methods.)
+4)Effectively, the HashMap is immutable. This allows multiple get operations to run in parallel, which can be a major performance boost
+
+
+disadvantages
+
+other alternatives
+1) vector -  synchronized methods.
+advants 
+disadvants
+
+2)ArrayList - synchronized
+advants 
+disadvant
+
+HotelRoom
+   i) no setters for all fields except ownerID because these fields should not be editable with the exception of ownerID.
+   2) they are read-only and hence the values are set during construction time in the constructor.
+
+	Date is stored as String object and not date object cause it makes it easier for all the fields to contained in a
+    String array later on.
+
+   4) data type of the rate variable is String, this makes it easier to manage the currency symbol ($)
+
+Equality of HotelRooms
+ To check that two or more HotelRooms are equal the overridden equals method is used. All the field variables as in the 
+case of hotel name, location, size, smoking, rate, and date are compared for with the exception of ownerid because by 
+creation their are empty/null.
+
+
+DBClient;
+ An interface which is called by the Client when searching or booking for hotel rooms.
+ Provides methods which will be called in the GUI in either of the running modes; either through the
+  server or local connection.
+
+Made this an interface for various reasons.
+
+
+advantages;
+1.you could later change your code, that is
+
+If there is any subclass of LocalClient or any other class the implements the DBClient
+ they can be changed in place of where the DBClient reference is found and this will not break the code,
+ unlike when it is being implemented to a concrete class
+example  LocalClient client = new LocalClient 
+in the future if the implemented interface changes then the code would break
+
+
+2.an interface gives you more abstraction, and makes the code
+more flexible and resilient to changes, because you can use different
+implementations of the same interface without changing its client.
+
+3  Easy Maintenance
+
+4.Reusable Code, Plug-Compatible
+When you use an interface, you lower the bar to potential class interactions, and hence reusability. 
+
+5 Compilation Efficiency
+Programming to an interfaces helps in large projects
+ in case you changed one of the method signatures of LocalClient, all the code that calls that method has to be recompiled 
+too. If you use the DBClient interface, and don’t change the interface, changing just the interface implementation classes,
+LocalClient,  nothing need be recompiled, so long as those classes accessed via the DBClient interface name 
+rather than specific class name(LocalClient).
+
+
+disadvantages
+1) You can’t specify static methods in the interface. All interface methods are instance methods.
+  Hence if any implementing class needs a static method then it will have to declare their own static methods.
+
+
+The getHotelRoomsByCriteria method in the DBClient returns  an Object[][]  which contains Hotel rooms in the form of
+String array. The JTable in the view uses Objects in its rows and columns hence it makes it straight forward when a search
+returns the results in Object array to be used by the HotelRoomTableModel.
+
+
+All the methods in the DBClient throw IOExceptions.
+reasons and advantages.
+1) When running in networked mode and the server is disconnected, then this Exception will be thrown and it will be
+  propagated to further throw the RemoteException in the Application ???
+
+
+LocalClient 
+
+It implements DBClient and implements of its methods.
+
+It is good to programme to an interface, in  that
+
+DBClient client = new LocalClient(String dbPath);
+
+If there is no database file passed into the constructo to load to application then there is no need to continue running 
+the application so the Application exits.
+This is not expected to happen, anyway, because the client is forced to select the database file when starting the mode 
+in which to run the application.
+
+
+disadvantages.
+
+A)Booking - if a record is already booked and you try to book it again, you are given once chance to see whether you are the 
+       owner( one rebooking chance,) 
+if you are
+   then you can rebook with same ID.
+if you are not,
+   then System would not allow you.
+
+When you try it once and you are allowed or not allowed , you would not be given the chance to try to book again.
+A message would be directly shown telling you whether room is not available or you cancelled your booking.
+if another user else tries this chance on a different system else where, that one chance is cancelled whether or not it was 
+the real owner. In such case, any one who wants to rebook again on that same booked room should call the Hotel.
+This is for security reasons among other reasons.
+
+
+
+RecordNotFoundException
+It is declared public because it is being thrown at the server too????
+
+>>> The 48 hour Rule.
+
+
+
+
+
+RECORD CACHE AGAINST WRITING TO THE FILE DIRECTLY.
+ Records are cached into a HashMap the first time they are loaded to the view.
+ Records are then accessed and managed from the cache and updating the physical database file appropriately.
+
+ advantages.
+  1) It prevents the tedious process of always writing and reading directly from the physical database on each operation
+       hence less tedious.
+  2) It helps prevents such problems as IOExceptions in the reading and writing directly to the file.
+
+other alternative.
+  Could have written and read directly to the database file on each single operation.
+
+advantages.
+ Would not have to write back to the file after all the operations are complete since each single operations deals directly 
+ with the file and keeps it updated in time.  
+
+disadvantages.
+   Very tedious process.
+
+Used HashMap to cache:
+
+Why hashMap is declared static, to allow all instances to have, access and update one common map.
+advantages.
+  1) random access
+   2) fast access ????
+
+disadvants
+
+other data types.
+  
+
+
+IN DB IN GENERAL.
+ the data and local client class are programmed to interfaces, DBAccess, and DBClient respectively.
+Data class implements DBAccess directly.
+advants.
+
+disadvants
+
+
+advantages
+1)In this sense, if in the future other subclasses of DBAccess and DBClient can be used in places where the interfaces are referenced.
+2)When the interfaces change, not much of our code will have to be changed ????.
+3). Program becomes implementation-independent.
+  If the client of particular component references DBAccess by its API then the client gets more flexible since it does not
+   have to change to use another implementation of the DBAccess.  ?????
+
+
+
+GUI 
+ JTable -  It is appropriate to show ownerIDs cos tis the only way the CSRs would know about them. For the clients, they
+            already know about them.
+
+
+GENERAL ACHITECTURE
+MVC pattern is used in design.
+
+Model = database file.
+
+Data class is responsible for extracting the information stored in the datafile in the form of bytes and converting it to
+ a String.
+        -It is also responsible for converting String into bytes in inputing them into the database file in the way it is 
+          stored in the datafile.
+
+
+Contoller = DBClients(LocalClient)
+         - Responsible for converting the String obtained from the Data class into HotelRoom objects and carrying the information
+      to the GUI.
+         _ It is also responsible for taking information from the GUI in the form of HotelRoom objects and converting them into 
+         String and sending it to the Data Class which in turn converts it to bytes and use it to look into the database for 
+      for the required information
+     - The controller is the logic of the application.
+     -makes sure what what is passed to the Data class and for that matter the database file is in the right format.
+       and what ever is presented to the GUI is in the right format.
+     
+     >>>>>>>More.
+
+View = GUI (JTable)
+
+
+Factory Pattern 
+  - used in the RemoteConnector
+
+All numberings start with zero.
+- this follows java numbering standards 
+hence the first record in the database file is numbered 0 and the second is numbered 1 and the third 2 and so on...
+
+
+ALONEOPTIONDIALOG.
+  - made the alone selection dialog run in a separate window.
+  advants.
+    1) makes a neat coding
+    2) makes it distinct.
+
+ -- used GroupLayout to arrange items in the window.
+  advants
+   disadvants.
+
+Other layouts i could have used are
+   1) borderlayout
+disadvants. 1) sizing of the window demands extra codes.
+
+APPLICATION RUNNER ........ (NONE).
+
+APPLICATIONWINDOW (DOne)
+ - the DBClient reference passed into the constructor of the Application allows the appropriate instance of the running
+   mode, eithe networked or non networked to used to instantiate the internal reference to the DBClient.
+
+  >>> In the actionPerformed method of the ExitApplication Inner class, the JOptionPane is used ask the user if they 
+   actually wants to close the application when the click exit from the file menu.
+
+advants. It might have been a mistake through which the user clicked the exit item, given them such a question helps to cancel
+ the exit and continue with their searches and bookings.
+   Or user might have a second thought of doing something again after clicking exit. Giving them this option allows them to 
+   get back to the application without having to exit and run the application all again.
+
+ >>>In the searchRooms method when a search is done a new HotelRoomTableModel is created to get data from search result
+ and the application's internal table's model is set to new HotelRoomTableModel.
+ In this sense, old table model will eventually become eligible for garbage collection and it will be garbage collected 
+ when the garbage collector runs.
+ ---reasons, advants, disadvants, and other alternatives.
+
+USER INSTRUCTIONS.  
+ Read and display from the GUI in addition to it being put inside the docs directory.
+- Read using the HotelRoomBookingApplicationInstruction class.
+
+Other approaches. 
+1)could have put online as HTML file.
+
+advantages of displaying in GUI.
+ - makes it more handy,
+  - user friendly
+  - professional
+  - easily accessible and run with application.
+
+
+Advantages of having put it online as HTML file would have been wide accessible by many users.
+The big disadvantage is where there is no internet connection, accessibility would be a problem.////???? IS IT TRUE?
+
+
+HOTELROOMBOOKINGAPPLICATION CLASS.
+
+ - Uses FileInputStream to read the file
+
+advants and disadvants
+>>> what other option could have been used.
+advants and disadvants.
+
+  2) Displays text in JTextArea set in a ScrollPane.
+
+ advantages: 1) Easy to read and it is clear.
+             2) Easy to manage as Scroll Bar makes it easier to scroll up and down instructions.????
+
+disadvants
+
+Could have used JDialog to display instructions but the instructions are too long which will result in a 
+rather huge dialogue making the gui too clumsy.
+ 
+
+HOTELROOMTABLEMODEL
+ >>> Pass the hotel room objects as object array into the constructor of this class.
+ >>> the title of the room objects' field values as also passed into the constructor as String arrays.
+
+advants. 
+  >>> takes the implementation of the Object  and String arrays from the HotelRoomTableModel class.
+   2) 
+disadvants.
+
+>>> other approaches.
+1)	Could have made invoked the getHotelRoomByCriteria to initialise the Object arra(data) for the 
+    TableModel to use.
+
+dusadvantage. 
+  1) dilutes the exact function of the class as being a TableModel by adding extra functionalities.
+
+
+OWNERIDDIALOG.
+1) extended a JDialog
+  advantages.
+  a) It is either you book or don't hence there would not be any need to minimize the window as it would have been 
+the possible case if a JFrame was extended. 
+
+2)` Used a separate window to accept owner ID and book selected room from the table.
+   Advantages 
+   1) This more convenient and professional
+   2)
+
+>>>  other approach
+  1) Could have let user enter the ID from the table.
+
+Disadvantages. 
+ 1) The booking activity would have been clumsied with the other items on the table.
+
+3) Uses a JFormattedTextField to accept owner ID inputted by the user.
+   With the aid of MaskFormatter to specify valid and number of individual inputs into the textFields.
+ 
+ advantages.
+ 1) No need for manually validating/verifying of inputs into textfield.
+ 2) 
+
+ disadvantages.
+ 1)
+
+other options .
+-- could have used JTextField
+  disadvantages. 
+    1) Would have done the validation of the inputs to the textfield manually.
+    2) this is quite tedious
+
+ bookRoom method.
+
+  >> Whenever a booking activity is processed a new  HotelRoomTableModel instance is created and the table's model is 
+   set to the new  HotelRoomTableModel instance created. This makes the old  HotelRoomTableModel eligible for garbage 
+   collection and would be garbage collected appropriately.
+
+Why that way.
+advants and disadvants.   
+   This new creation does not however happen when the client is disconnected from the server when running in networked mode
+
+
+
+General Assumptions.

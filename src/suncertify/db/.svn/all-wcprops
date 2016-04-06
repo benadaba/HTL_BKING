@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/Suncertify/!svn/ver/6/trunk/HotelRoom/src/suncertify/db
+END
+DataClassTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Suncertify/!svn/ver/14/trunk/HotelRoom/src/suncertify/db/DataClassTest.java
+END
+DuplicateKeyException.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/Suncertify/!svn/ver/3/trunk/HotelRoom/src/suncertify/db/DuplicateKeyException.java
+END
+DBClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/Suncertify/!svn/ver/25/trunk/HotelRoom/src/suncertify/db/DBClient.java
+END
+DBAccess.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/Suncertify/!svn/ver/25/trunk/HotelRoom/src/suncertify/db/DBAccess.java
+END
+HotelRoom.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/Suncertify/!svn/ver/17/trunk/HotelRoom/src/suncertify/db/HotelRoom.java
+END
+Data.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/Suncertify/!svn/ver/27/trunk/HotelRoom/src/suncertify/db/Data.java
+END
+LocalClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/Suncertify/!svn/ver/18/trunk/HotelRoom/src/suncertify/db/LocalClient.java
+END
+RecordNotFoundException.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/Suncertify/!svn/ver/3/trunk/HotelRoom/src/suncertify/db/RecordNotFoundException.java
+END

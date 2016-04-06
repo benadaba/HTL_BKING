@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/Suncertify/!svn/ver/8/trunk/HotelRoom/src/suncertify/gui
+END
+ServerOptionDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Suncertify/!svn/ver/22/trunk/HotelRoom/src/suncertify/gui/ServerOptionDialog.java
+END
+HotelRoomTableModel.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Suncertify/!svn/ver/3/trunk/HotelRoom/src/suncertify/gui/HotelRoomTableModel.java
+END
+InstructionsDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Suncertify/!svn/ver/18/trunk/HotelRoom/src/suncertify/gui/InstructionsDialog.java
+END
+AloneOptionDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/Suncertify/!svn/ver/22/trunk/HotelRoom/src/suncertify/gui/AloneOptionDialog.java
+END
+OwnerIDDialog.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/Suncertify/!svn/ver/23/trunk/HotelRoom/src/suncertify/gui/OwnerIDDialog.java
+END
+SavedConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/Suncertify/!svn/ver/18/trunk/HotelRoom/src/suncertify/gui/SavedConfiguration.java
+END
+ApplicationWindow.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/Suncertify/!svn/ver/26/trunk/HotelRoom/src/suncertify/gui/ApplicationWindow.java
+END
+ApplicationRunner.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/Suncertify/!svn/ver/20/trunk/HotelRoom/src/suncertify/gui/ApplicationRunner.java
+END

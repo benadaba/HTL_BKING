@@ -1,0 +1,216 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package suncertify.gui;
+
+
+import java.io.*;
+import java.util.*;
+import suncertify.util.Logger;
+
+/**
+ * Provides read/write access to the user's saved configuration parameters on
+ * disk, so that next time they connect, they can be offered the same configuration
+ * parameters as a default.
+ *
+ * @author Bernard
+ */
+public class SavedConfiguration {
+
+    /**
+     * The main Logger instance for this class. All log messages from
+     * this class are logged through this member.
+     * The Logger namespace is <code>gui</code>.
+     */
+  private static  java.util.logging.Logger log = Logger.getLogger( "gui" );
+    /**
+     * key in Properties indicating that the value will be the database
+     * location.
+     */
+    public static final String DATABASE_LOCATION = "DatabaseLocation";
+
+    /**
+     * key in Properties indicating that the value will be the RMI Registry
+     * server address.
+     */
+    public static final String SERVER_ADDRESS = "ServerAddress"; 
+
+    /**
+     * key in Properties indicating that the value will be the port the RMI
+     * Registry listens on.
+     */
+    public static final String SERVER_PORT = "ServerPort";
+
+    /**
+     * the Properties for this application.
+     */
+    private Properties parameters = null;
+
+    /**
+     * The location where the configuration file will be saved.
+     */
+    private static final String BASE_DIRECTORY = System.getProperty("user.dir");
+
+    /**
+     * the name of the properties file.
+     */
+    private static final String OPTIONS_FILENAME = "suncertify.properties";
+
+    /**
+     * The file containing the saved configuration.
+     */
+    private static File savedOptionsFile
+            = new File(BASE_DIRECTORY, OPTIONS_FILENAME);
+
+    /**
+     * Placeholder for the singleton version of OptionsModel. Since we know
+     * that we will want at least one of these, we are creating the instance as
+     * soon as we possibly can. If we were unsure whether we would ever need
+     * this or not we would probably perform a lazy instantiation.
+     */
+    private static SavedConfiguration savedConfiguration
+            = new SavedConfiguration();
+
+
+   /**
+    * Creates a new instance of SavedConfiguration. There should only ever be
+    * one instance of this class (a Singleton), so we have made it private.
+    */
+   private SavedConfiguration() {
+      log.entering("SavedConfiguration", "Constructor");
+
+        parameters = loadParametersFromFile();
+
+        if (parameters == null) {
+            parameters = new Properties();
+
+            parameters.setProperty(SERVER_ADDRESS, "localhost");
+            parameters.setProperty(SERVER_PORT,
+                    "" + java.rmi.registry.Registry.REGISTRY_PORT);
+        }
+        log.exiting("SavedConfiguration", "Constructor");
+
+   }
+
+    /**
+     * returns the single instance of the SavedConfiguration.
+     *
+     * @return the single instance of the SavedConfiguration.
+     */
+    public static SavedConfiguration getSavedConfiguration() {
+        log.entering("SavedConfiguration", "getSavedConfiguration");
+        log.exiting("SavedConfiguration", "getSavedConfiguration",savedConfiguration );
+        return savedConfiguration;
+    }
+
+    /**
+     * returns the value of the named parameter.<p>
+     *
+     * @param parameterName the name of the parameter for which the user
+     * is requesting the value.
+     * @return the value of the named parameter.
+     */
+    public String getParameter(String parameterName) {
+       log.entering("SavedConfiguration", "getParameter", parameterName);
+       log.exiting("SavedConfiguration", "getParameter");
+
+        return parameters.getProperty(parameterName);
+    }
+
+    /**
+     * Updates the saved parameters with the new values. Always saves the new
+     * values immediately - this means we will be saving the properties file
+     * far more often than we need when we enter the first set of values,
+     * however once the initial set of values have been entered, they should
+     * rarely (if ever) be changed. So this will not be  a problem most of the
+     * time. Doing it this way means that the user of this class need not
+     * explictly save the parameters.
+     *
+     * @param parameterName the name of the parameter.
+     * @param parameterValue the value to be stored for the parameter
+     */
+    public void setParameter(String parameterName, String parameterValue) {
+        log.entering("SavedConfiguration", "setParameter",
+                new String[]{parameterName, parameterValue});
+
+        parameters.setProperty(parameterName, parameterValue);
+        saveParametersToFile();
+
+       log.exiting("SavedConfiguration", "setParameter");
+    }
+
+    /**
+     * saves the parameters to a file so that they can be used again next time
+     * the application starts.
+     */
+    private void saveParametersToFile() {
+       log.entering("SavedConfiguration", "saveParametersToFile");
+
+        try {
+            synchronized (savedOptionsFile) {
+               if (savedOptionsFile.exists()) {
+                   savedOptionsFile.delete();
+               }
+               savedOptionsFile.createNewFile();
+               FileOutputStream fos = new FileOutputStream(savedOptionsFile);
+               parameters.store(fos, "HotelRoom Booking Application's configuration");
+               fos.close();
+            }
+        } catch (IOException e) {
+           
+           String msg = "Unable to save user parameters to file. "
+                    + "They wont be remembered next time you start.";
+           
+           ApplicationRunner.manageError(null, msg);
+           log.info("Unable to save user parameters to file. "
+                    + "They wont be remembered next time you start.");
+
+        }
+       log.exiting("SavedConfiguration", "saveParametersToFile");
+    }
+
+    /**
+     * attempts to load the saved parameters from the file so that the user does
+     * not have to reenter all the information.
+     *
+     * @return Properties loaded from file or null.
+     */
+    private Properties loadParametersFromFile() {
+        log.entering("SavedConfiguration", "loadParametersFromFile");
+
+        Properties loadedProperties = null;
+
+        if (savedOptionsFile.exists() && savedOptionsFile.canRead()) {
+            synchronized (savedOptionsFile) {
+               try {
+                   FileInputStream fis = new FileInputStream(savedOptionsFile);
+                   loadedProperties = new Properties();
+                   loadedProperties.load(fis);
+                   fis.close();
+               } catch (FileNotFoundException e) {
+                   assert false : "File not found after existance verified";
+                   String msg = "Unable to load user "
+                              + "parameters. Default values will be used.\n";
+                   ApplicationRunner.manageError(null, msg);
+                  log.info("Unable to load user "
+                              + "parameters. Default values will be used.\n"
+                              +e);
+           
+               } catch (IOException e) {
+                   assert false : "Bad data in parameters file";
+                   String msg = "Unable to load user "
+                              + "parameters. Default values will be used.\n";
+                   ApplicationRunner.manageError(null, msg);
+                   log.info("Unable to load user "
+                              + "parameters. Default values will be used.\n"
+                              +e);
+               }
+            }
+        }
+         log.exiting("SavedConfiguration", "loadParametersFromFile",loadedProperties);
+         return loadedProperties;
+    }
+}
+
