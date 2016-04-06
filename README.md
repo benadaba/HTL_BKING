@@ -4,6 +4,7 @@ URLyBird HOTEL ROOM BOOKING APPLICATION
 VERSION
 
 Table Of Content
+
 1.	JDK Version and Host Platform
 1.0	JDK version
 1.1	Host Platform
@@ -11,10 +12,13 @@ Table Of Content
 
 
 
+
 1 JDK Version and Host Platform
 
 
+
 1.0 The JDK version used for this project was jdk1.6.0_11
+
 
 The following is detailed information on the exact Java version:
 
@@ -23,6 +27,8 @@ java version "1.6.0_11"
 Java(TM) 2 Runtime Environment, Standard Edition (build 1.6.0_11-b03)
 
 Java HotSpot(TM) Client VM (build 11.0-b16, mixed mode, sharing)
+
+
 
 
 
